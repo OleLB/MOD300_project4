@@ -1,12 +1,12 @@
 from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-
-class LRModel:
+class BetterLRModel:
     def __init__(self, country: str) -> None:
-        self.country = country
+        self.country = country.lower()
         self.guinea_x = None
         self.guinea_y = None
 
@@ -24,10 +24,16 @@ class LRModel:
     def plot(self) -> None:
         """ Function that uses SKLearn to train the model and then plots it with Matplotlib. """
 
-        model = LinearRegression()
-        model.fit(self.guinea_x, self.guinea_y)
+        assert self.guinea_x is not None and self.guinea_y is not None, "You need to call load_data() before calling plot()" 
 
-        y_pred = model.predict(self.guinea_x)
+        poly = PolynomialFeatures(degree=4, include_bias=False)
+        poly_features = poly.fit_transform(self.guinea_x)
+
+
+        model = LinearRegression()
+        model.fit(poly_features, self.guinea_y)
+
+        y_pred = model.predict(poly_features)
 
         plt.plot(self.guinea_x, self.guinea_y, label='Real data')
         plt.plot(self.guinea_x, y_pred, label='Fitted line')
@@ -35,3 +41,7 @@ class LRModel:
         plt.ylabel('Cummulative number of outbreaks')
         plt.legend()
         plt.show()
+
+guinea = BetterLRModel("guinea")
+guinea.load_data()
+guinea.plot()
