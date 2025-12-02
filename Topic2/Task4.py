@@ -53,7 +53,7 @@ def create_dataset(dataset, look_back):
         data_y.append(dataset[i+look_back, 0])
     return np.array(data_x), np.array(data_y)
 
-LOOK_BACK = 3
+LOOK_BACK = 1
 
 # LSTM for each country
 # ------------------- Guinea ---------------------------
