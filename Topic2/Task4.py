@@ -4,11 +4,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Source:
-# https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
+
+# Source:
+# https://machinelearningmastery.com/time-series-prediction-lstm-recurrent-neural-networks-python-keras/
 
 g = pd.read_csv("Topic2/ebola_cases_guinea.dat", delim_whitespace=True)
 l = pd.read_csv("Topic2/ebola_cases_liberia.dat", delim_whitespace=True)
@@ -54,6 +55,7 @@ def make_sequences(dataset, look_back):
 
 LOOK_BACK = 3
 
+# LSTM for each country
 # ------------------- Guinea ---------------------------
 
 trainX_g, trainY_g = make_sequences(train_g, LOOK_BACK)
@@ -195,7 +197,7 @@ plt.subplot(3, 1, 1)
 plt.plot(data_g_orig[:, 0], label="Actual")
 plt.plot(trainPlot_g[:, 0], label="Train prediction")
 plt.plot(testPlot_g[:, 0], label="Test prediction")
-plt.title("Ebola cases – Guinea (LSTM)")
+plt.title("Guinea")
 plt.xlabel("Time index")
 plt.ylabel("NumOutbreaks")
 plt.legend()
@@ -205,7 +207,7 @@ plt.subplot(3, 1, 2)
 plt.plot(data_l_orig[:, 0], label="Actual")
 plt.plot(trainPlot_l[:, 0], label="Train prediction")
 plt.plot(testPlot_l[:, 0], label="Test prediction")
-plt.title("Ebola cases – Liberia (LSTM)")
+plt.title("Liberia")
 plt.xlabel("Time index")
 plt.ylabel("NumOutbreaks")
 plt.legend()
@@ -215,7 +217,7 @@ plt.subplot(3, 1, 3)
 plt.plot(data_sl_orig[:, 0], label="Actual")
 plt.plot(trainPlot_sl[:, 0], label="Train prediction")
 plt.plot(testPlot_sl[:, 0], label="Test prediction")
-plt.title("Ebola cases – Sierra Leone (LSTM)")
+plt.title("Sierra Leone")
 plt.xlabel("Time index")
 plt.ylabel("NumOutbreaks")
 plt.legend()
