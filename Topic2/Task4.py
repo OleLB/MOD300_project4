@@ -1,4 +1,4 @@
-"""Task 4: Time Series Prediction with LSTM on Ebola Cases Data"""
+"""Task 4: Time Series Prediction with LSTM"""
 
 import numpy as np
 import pandas as pd
@@ -52,6 +52,7 @@ def create_dataset(dataset, look_back):
         data_x.append(dataset[i:i+look_back, 0])
         data_y.append(dataset[i+look_back, 0])
     return np.array(data_x), np.array(data_y)
+
 LOOK_BACK = 3
 
 # LSTM for each country
@@ -76,28 +77,27 @@ history_g = model_g.fit(
     verbose=1
 )
 
-trainPred_g = model_g.predict(trainX_g)
-testPred_g = model_g.predict(testX_g)
+trainPredict_g = model_g.predict(trainX_g)
+testPredict_g = model_g.predict(testX_g)
 
 # reshape y for inverse scaling
 trainY_g_2d = trainY_g.reshape(-1, 1)
 testY_g_2d = testY_g.reshape(-1, 1)
 
-trainPred_g_inv = scaler_g.inverse_transform(trainPred_g)
-testPred_g_inv = scaler_g.inverse_transform(testPred_g)
+trainPredict_g_inv = scaler_g.inverse_transform(trainPredict_g)
+testPredict_g_inv = scaler_g.inverse_transform(testPredict_g)
 trainY_g_inv = scaler_g.inverse_transform(trainY_g_2d)
 testY_g_inv = scaler_g.inverse_transform(testY_g_2d)
 
 # build arrays for plotting
-data_g_orig = data_g
-trainPlot_g = np.empty_like(data_g_orig)
+trainPlot_g = np.empty_like(data_g)
 trainPlot_g[:] = np.nan
-trainPlot_g[LOOK_BACK:LOOK_BACK + len(trainPred_g_inv), 0] = trainPred_g_inv[:, 0]
+trainPlot_g[LOOK_BACK:LOOK_BACK + len(trainPredict_g_inv), 0] = trainPredict_g_inv[:, 0]
 
-testPlot_g = np.empty_like(data_g_orig)
+testPlot_g = np.empty_like(data_g)
 testPlot_g[:] = np.nan
 test_start_g = train_size_g + LOOK_BACK
-testPlot_g[test_start_g:test_start_g + len(testPred_g_inv), 0] = testPred_g_inv[:, 0]
+testPlot_g[test_start_g:test_start_g + len(testPredict_g_inv), 0] = testPredict_g_inv[:, 0]
 
 # ------------------- Liberia ---------------------------
 
@@ -120,28 +120,27 @@ history_l = model_l.fit(
     verbose=1
 )
 
-trainPred_l = model_l.predict(trainX_l)
-testPred_l = model_l.predict(testX_l)
+trainPredict_l = model_l.predict(trainX_l)
+testPredict_l = model_l.predict(testX_l)
 
 # reshape y
 trainY_l_2d = trainY_l.reshape(-1, 1)
 testY_l_2d = testY_l.reshape(-1, 1)
 
 # inverse transform
-trainPred_l_inv = scaler_l.inverse_transform(trainPred_l)
-testPred_l_inv = scaler_l.inverse_transform(testPred_l)
+trainPredict_l_inv = scaler_l.inverse_transform(trainPredict_l)
+testPredict_l_inv = scaler_l.inverse_transform(testPredict_l)
 trainY_l_inv = scaler_l.inverse_transform(trainY_l_2d)
 testY_l_inv = scaler_l.inverse_transform(testY_l_2d)
 
-data_l_orig = data_l
-trainPlot_l = np.empty_like(data_l_orig)
+trainPlot_l = np.empty_like(data_l)
 trainPlot_l[:] = np.nan
-trainPlot_l[LOOK_BACK:LOOK_BACK + len(trainPred_l_inv), 0] = trainPred_l_inv[:, 0]
+trainPlot_l[LOOK_BACK:LOOK_BACK + len(trainPredict_l_inv), 0] = trainPredict_l_inv[:, 0]
 
-testPlot_l = np.empty_like(data_l_orig)
+testPlot_l = np.empty_like(data_l)
 testPlot_l[:] = np.nan
 test_start_l = train_size_l + LOOK_BACK
-testPlot_l[test_start_l:test_start_l + len(testPred_l_inv), 0] = testPred_l_inv[:, 0]
+testPlot_l[test_start_l:test_start_l + len(testPredict_l_inv), 0] = testPredict_l_inv[:, 0]
 
 # ------------------- Sierra Leone ---------------------------
 
@@ -164,28 +163,27 @@ history_sl = model_sl.fit(
     verbose=1
 )
 
-trainPred_sl = model_sl.predict(trainX_sl)
-testPred_sl = model_sl.predict(testX_sl)
+trainPredict_sl = model_sl.predict(trainX_sl)
+testPredict_sl = model_sl.predict(testX_sl)
 
 # reshape y
 trainY_sl_2d = trainY_sl.reshape(-1, 1)
 testY_sl_2d = testY_sl.reshape(-1, 1)
 
 # inverse transform
-trainPred_sl_inv = scaler_sl.inverse_transform(trainPred_sl)
-testPred_sl_inv = scaler_sl.inverse_transform(testPred_sl)
+trainPredict_sl_inv = scaler_sl.inverse_transform(trainPredict_sl)
+testPredict_sl_inv = scaler_sl.inverse_transform(testPredict_sl)
 trainY_sl_inv = scaler_sl.inverse_transform(trainY_sl_2d)
 testY_sl_inv = scaler_sl.inverse_transform(testY_sl_2d)
 
-data_sl_orig = data_sl
-trainPlot_sl = np.empty_like(data_sl_orig)
+trainPlot_sl = np.empty_like(data_sl)
 trainPlot_sl[:] = np.nan
-trainPlot_sl[LOOK_BACK:LOOK_BACK + len(trainPred_sl_inv), 0] = trainPred_sl_inv[:, 0]
+trainPlot_sl[LOOK_BACK:LOOK_BACK + len(trainPredict_sl_inv), 0] = trainPredict_sl_inv[:, 0]
 
-testPlot_sl = np.empty_like(data_sl_orig)
+testPlot_sl = np.empty_like(data_sl)
 testPlot_sl[:] = np.nan
 test_start_sl = train_size_sl + LOOK_BACK
-testPlot_sl[test_start_sl:test_start_sl + len(testPred_sl_inv), 0] = testPred_sl_inv[:, 0]
+testPlot_sl[test_start_sl:test_start_sl + len(testPredict_sl_inv), 0] = testPredict_sl_inv[:, 0]
 
 # ---------------------------- Plotting ---------------------------
 
@@ -193,7 +191,7 @@ plt.figure(figsize=(12, 12))
 
 # Guinea
 plt.subplot(3, 1, 1)
-plt.plot(data_g_orig[:, 0], label="Actual")
+plt.plot(data_g[:, 0], label="Actual")
 plt.plot(trainPlot_g[:, 0], label="Train prediction")
 plt.plot(testPlot_g[:, 0], label="Test prediction")
 plt.title("Guinea")
@@ -203,7 +201,7 @@ plt.legend()
 
 # Liberia
 plt.subplot(3, 1, 2)
-plt.plot(data_l_orig[:, 0], label="Actual")
+plt.plot(data_l[:, 0], label="Actual")
 plt.plot(trainPlot_l[:, 0], label="Train prediction")
 plt.plot(testPlot_l[:, 0], label="Test prediction")
 plt.title("Liberia")
@@ -213,7 +211,7 @@ plt.legend()
 
 # Sierra Leone
 plt.subplot(3, 1, 3)
-plt.plot(data_sl_orig[:, 0], label="Actual")
+plt.plot(data_sl[:, 0], label="Actual")
 plt.plot(trainPlot_sl[:, 0], label="Train prediction")
 plt.plot(testPlot_sl[:, 0], label="Test prediction")
 plt.title("Sierra Leone")
