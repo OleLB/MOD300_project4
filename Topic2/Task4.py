@@ -40,26 +40,25 @@ train_size_sl = int(len(data_sl_scaled) * 0.67)
 train_sl = data_sl_scaled[:train_size_sl]
 test_sl = data_sl_scaled[train_size_sl:]
 
-def make_sequences(dataset, look_back):
+def create_dataset(dataset, look_back):
     """    
     Create sequences of data for LSTM input
 
     :param dataset: The dataset to create sequences from
     :param look_back: The number of previous time steps to use as input variables
     """
-    var_x, var_y = [], []
+    data_x, data_y = [], []
     for i in range(len(dataset) - look_back):
-        var_x.append(dataset[i:i+look_back, 0])
-        var_y.append(dataset[i+look_back, 0])
-    return np.array(var_x), np.array(var_y)
-
+        data_x.append(dataset[i:i+look_back, 0])
+        data_y.append(dataset[i+look_back, 0])
+    return np.array(data_x), np.array(data_y)
 LOOK_BACK = 3
 
 # LSTM for each country
 # ------------------- Guinea ---------------------------
 
-trainX_g, trainY_g = make_sequences(train_g, LOOK_BACK)
-testX_g, testY_g = make_sequences(test_g, LOOK_BACK)
+trainX_g, trainY_g = create_dataset(train_g, LOOK_BACK)
+testX_g, testY_g = create_dataset(test_g, LOOK_BACK)
 
 trainX_g = trainX_g.reshape((trainX_g.shape[0], LOOK_BACK, 1))
 testX_g = testX_g.reshape((testX_g.shape[0], LOOK_BACK, 1))
@@ -102,8 +101,8 @@ testPlot_g[test_start_g:test_start_g + len(testPred_g_inv), 0] = testPred_g_inv[
 
 # ------------------- Liberia ---------------------------
 
-trainX_l, trainY_l = make_sequences(train_l, LOOK_BACK)
-testX_l, testY_l = make_sequences(test_l, LOOK_BACK)
+trainX_l, trainY_l = create_dataset(train_l, LOOK_BACK)
+testX_l, testY_l = create_dataset(test_l, LOOK_BACK)
 
 trainX_l = trainX_l.reshape((trainX_l.shape[0], LOOK_BACK, 1))
 testX_l = testX_l.reshape((testX_l.shape[0], LOOK_BACK, 1))
@@ -146,8 +145,8 @@ testPlot_l[test_start_l:test_start_l + len(testPred_l_inv), 0] = testPred_l_inv[
 
 # ------------------- Sierra Leone ---------------------------
 
-trainX_sl, trainY_sl = make_sequences(train_sl, LOOK_BACK)
-testX_sl, testY_sl = make_sequences(test_sl, LOOK_BACK)
+trainX_sl, trainY_sl = create_dataset(train_sl, LOOK_BACK)
+testX_sl, testY_sl = create_dataset(test_sl, LOOK_BACK)
 
 trainX_sl = trainX_sl.reshape((trainX_sl.shape[0], LOOK_BACK, 1))
 testX_sl = testX_sl.reshape((testX_sl.shape[0], LOOK_BACK, 1))
