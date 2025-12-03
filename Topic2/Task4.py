@@ -15,10 +15,12 @@ g = pd.read_csv("Topic2/ebola_cases_guinea.dat", delim_whitespace=True)
 l = pd.read_csv("Topic2/ebola_cases_liberia.dat", delim_whitespace=True)
 sl = pd.read_csv("Topic2/ebola_cases_sierra_leone.dat", delim_whitespace=True)
 
+# reshape from 1D to 2D
 data_g = g["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
 data_l = l["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
 data_sl = sl["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
 
+# Normalize
 scaler_g = MinMaxScaler(feature_range=(0, 1))
 data_g_scaled = scaler_g.fit_transform(data_g)
 
@@ -28,6 +30,7 @@ data_l_scaled = scaler_l.fit_transform(data_l)
 scaler_sl = MinMaxScaler(feature_range=(0, 1))
 data_sl_scaled = scaler_sl.fit_transform(data_sl)
 
+# Split for train and test
 train_size_g = int(len(data_g_scaled) * 0.67) # 67% for training
 train_g = data_g_scaled[:train_size_g]
 test_g = data_g_scaled[train_size_g:]
@@ -61,13 +64,14 @@ LOOK_BACK = 1
 trainX_g, trainY_g = create_dataset(train_g, LOOK_BACK)
 testX_g, testY_g = create_dataset(test_g, LOOK_BACK)
 
+# reshape input to be [samples, time steps, features]
 trainX_g = trainX_g.reshape((trainX_g.shape[0], LOOK_BACK, 1))
 testX_g = testX_g.reshape((testX_g.shape[0], LOOK_BACK, 1))
 
+# build LSTM model
 model_g = Sequential()
 model_g.add(LSTM(50, input_shape=(LOOK_BACK, 1)))
 model_g.add(Dense(1))
-
 model_g.compile(loss="mean_squared_error", optimizer="adam")
 
 history_g = model_g.fit(
@@ -80,10 +84,11 @@ history_g = model_g.fit(
 trainPredict_g = model_g.predict(trainX_g)
 testPredict_g = model_g.predict(testX_g)
 
-# reshape y for inverse scaling
+# reshape y
 trainY_g_2d = trainY_g.reshape(-1, 1)
 testY_g_2d = testY_g.reshape(-1, 1)
 
+# inverse predictions
 trainPredict_g_inv = scaler_g.inverse_transform(trainPredict_g)
 testPredict_g_inv = scaler_g.inverse_transform(testPredict_g)
 trainY_g_inv = scaler_g.inverse_transform(trainY_g_2d)
@@ -99,6 +104,7 @@ testPlot_g[:] = np.nan
 test_start_g = train_size_g + LOOK_BACK
 testPlot_g[test_start_g:test_start_g + len(testPredict_g_inv), 0] = testPredict_g_inv[:, 0]
 
+# same logic for Liberia and Sierra Leone
 # ------------------- Liberia ---------------------------
 
 trainX_l, trainY_l = create_dataset(train_l, LOOK_BACK)
@@ -110,7 +116,6 @@ testX_l = testX_l.reshape((testX_l.shape[0], LOOK_BACK, 1))
 model_l = Sequential()
 model_l.add(LSTM(50, input_shape=(LOOK_BACK, 1)))
 model_l.add(Dense(1))
-
 model_l.compile(loss="mean_squared_error", optimizer="adam")
 
 history_l = model_l.fit(
@@ -123,11 +128,9 @@ history_l = model_l.fit(
 trainPredict_l = model_l.predict(trainX_l)
 testPredict_l = model_l.predict(testX_l)
 
-# reshape y
 trainY_l_2d = trainY_l.reshape(-1, 1)
 testY_l_2d = testY_l.reshape(-1, 1)
 
-# inverse transform
 trainPredict_l_inv = scaler_l.inverse_transform(trainPredict_l)
 testPredict_l_inv = scaler_l.inverse_transform(testPredict_l)
 trainY_l_inv = scaler_l.inverse_transform(trainY_l_2d)
@@ -153,7 +156,6 @@ testX_sl = testX_sl.reshape((testX_sl.shape[0], LOOK_BACK, 1))
 model_sl = Sequential()
 model_sl.add(LSTM(50, input_shape=(LOOK_BACK, 1)))
 model_sl.add(Dense(1))
-
 model_sl.compile(loss="mean_squared_error", optimizer="adam")
 
 history_sl = model_sl.fit(
@@ -166,11 +168,9 @@ history_sl = model_sl.fit(
 trainPredict_sl = model_sl.predict(trainX_sl)
 testPredict_sl = model_sl.predict(testX_sl)
 
-# reshape y
 trainY_sl_2d = trainY_sl.reshape(-1, 1)
 testY_sl_2d = testY_sl.reshape(-1, 1)
 
-# inverse transform
 trainPredict_sl_inv = scaler_sl.inverse_transform(trainPredict_sl)
 testPredict_sl_inv = scaler_sl.inverse_transform(testPredict_sl)
 trainY_sl_inv = scaler_sl.inverse_transform(trainY_sl_2d)
@@ -195,7 +195,7 @@ plt.plot(data_g[:, 0], label="Actual")
 plt.plot(trainPlot_g[:, 0], label="Train prediction")
 plt.plot(testPlot_g[:, 0], label="Test prediction")
 plt.title("Guinea")
-plt.xlabel("Time index")
+plt.xlabel("Time")
 plt.ylabel("NumOutbreaks")
 plt.legend()
 
@@ -205,7 +205,7 @@ plt.plot(data_l[:, 0], label="Actual")
 plt.plot(trainPlot_l[:, 0], label="Train prediction")
 plt.plot(testPlot_l[:, 0], label="Test prediction")
 plt.title("Liberia")
-plt.xlabel("Time index")
+plt.xlabel("Time")
 plt.ylabel("NumOutbreaks")
 plt.legend()
 
@@ -215,7 +215,7 @@ plt.plot(data_sl[:, 0], label="Actual")
 plt.plot(trainPlot_sl[:, 0], label="Train prediction")
 plt.plot(testPlot_sl[:, 0], label="Test prediction")
 plt.title("Sierra Leone")
-plt.xlabel("Time index")
+plt.xlabel("Time")
 plt.ylabel("NumOutbreaks")
 plt.legend()
 
