@@ -20,6 +20,8 @@ data_g = g["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
 data_l = l["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
 data_sl = sl["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
 
+assert data_g.ndim == 2 and data_l.ndim == 2 and data_sl.ndim == 2, "Data should be 2D"
+
 # Normalize
 scaler_g = MinMaxScaler(feature_range=(0, 1))
 data_g_scaled = scaler_g.fit_transform(data_g)
