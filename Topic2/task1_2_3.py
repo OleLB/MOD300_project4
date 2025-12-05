@@ -125,5 +125,3 @@ def plot_countries(countries):
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper right")
     fig.tight_layout(pad=2.0)
-
-    return fig, axes
