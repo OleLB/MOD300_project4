@@ -188,6 +188,9 @@ testPlot_sl[test_start_sl:test_start_sl + len(testPredict_sl_inv), 0] = testPred
 # ---------------------------- Plotting ---------------------------
 
 def plot_lstm_results():
+    """
+    Plot the results
+    """
     plt.figure(figsize=(12, 12))
 
     # Guinea
