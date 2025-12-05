@@ -78,7 +78,7 @@ history_g = model_g.fit(
     trainX_g, trainY_g,
     epochs=50,
     batch_size=1,
-    verbose=1
+    verbose=0
 )
 
 trainPredict_g = model_g.predict(trainX_g)
@@ -122,7 +122,7 @@ history_l = model_l.fit(
     trainX_l, trainY_l,
     epochs=50,
     batch_size=1,
-    verbose=1
+    verbose=0
 )
 
 trainPredict_l = model_l.predict(trainX_l)
@@ -162,7 +162,7 @@ history_sl = model_sl.fit(
     trainX_sl, trainY_sl,
     epochs=50,
     batch_size=1,
-    verbose=1
+    verbose=0
 )
 
 trainPredict_sl = model_sl.predict(trainX_sl)
@@ -187,37 +187,41 @@ testPlot_sl[test_start_sl:test_start_sl + len(testPredict_sl_inv), 0] = testPred
 
 # ---------------------------- Plotting ---------------------------
 
-plt.figure(figsize=(12, 12))
+def plot_lstm_results():
+    plt.figure(figsize=(12, 12))
 
-# Guinea
-plt.subplot(3, 1, 1)
-plt.plot(data_g[:, 0], label="Actual")
-plt.plot(trainPlot_g[:, 0], label="Train prediction")
-plt.plot(testPlot_g[:, 0], label="Test prediction")
-plt.title("Guinea")
-plt.xlabel("Time")
-plt.ylabel("NumOutbreaks")
-plt.legend()
+    # Guinea
+    plt.subplot(3, 1, 1)
+    plt.plot(data_g[:, 0], label="Actual")
+    plt.plot(trainPlot_g[:, 0], label="Train prediction")
+    plt.plot(testPlot_g[:, 0], label="Test prediction")
+    plt.title("Guinea")
+    plt.xlabel("Time")
+    plt.ylabel("NumOutbreaks")
+    plt.legend()
 
-# Liberia
-plt.subplot(3, 1, 2)
-plt.plot(data_l[:, 0], label="Actual")
-plt.plot(trainPlot_l[:, 0], label="Train prediction")
-plt.plot(testPlot_l[:, 0], label="Test prediction")
-plt.title("Liberia")
-plt.xlabel("Time")
-plt.ylabel("NumOutbreaks")
-plt.legend()
+    # Liberia
+    plt.subplot(3, 1, 2)
+    plt.plot(data_l[:, 0], label="Actual")
+    plt.plot(trainPlot_l[:, 0], label="Train prediction")
+    plt.plot(testPlot_l[:, 0], label="Test prediction")
+    plt.title("Liberia")
+    plt.xlabel("Time")
+    plt.ylabel("NumOutbreaks")
+    plt.legend()
 
-# Sierra Leone
-plt.subplot(3, 1, 3)
-plt.plot(data_sl[:, 0], label="Actual")
-plt.plot(trainPlot_sl[:, 0], label="Train prediction")
-plt.plot(testPlot_sl[:, 0], label="Test prediction")
-plt.title("Sierra Leone")
-plt.xlabel("Time")
-plt.ylabel("NumOutbreaks")
-plt.legend()
+    # Sierra Leone
+    plt.subplot(3, 1, 3)
+    plt.plot(data_sl[:, 0], label="Actual")
+    plt.plot(trainPlot_sl[:, 0], label="Train prediction")
+    plt.plot(testPlot_sl[:, 0], label="Test prediction")
+    plt.title("Sierra Leone")
+    plt.xlabel("Time")
+    plt.ylabel("NumOutbreaks")
+    plt.legend()
 
-plt.tight_layout()
-plt.show()
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    plot_lstm_results()
