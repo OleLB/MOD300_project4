@@ -1,4 +1,4 @@
-"""Task 1 and 2"""
+"""Classes and functions for Task 1, 2, 3"""
 
 from enum import Enum
 from dataclasses import dataclass
@@ -20,6 +20,11 @@ class TrainingMethod(Enum):
     POLYNOMIAL = "polynomial"
     SEQUENTIAL = "sequential"
 
+    @classmethod
+    def has_value(cls, value):
+        """Function for testing if training method exists"""
+        return value in cls._value2member_map_
+
 
 @dataclass
 class Country:
@@ -34,6 +39,10 @@ class Country:
 
     def __post_init__(self) -> None:
         try:
+            assert self.name is not None or self.name != "", (
+                "Country must be specified."
+            )
+
             filename = f"Topic2/ebola_cases_{self.name.replace(' ', '_').lower()}.dat"
             df = pd.read_csv(filename, sep="\t")
             self.x = df["Days"].values.astype("float32").reshape(-1, 1)
@@ -46,6 +55,10 @@ class Country:
 
         assert self.x is not None and self.y is not None, (
             "Failed to load x and y values"
+        )
+
+        assert TrainingMethod.has_value(training_method), (
+            "Training Method has to be either LINEAR, POLYNOMIAL or SEQUENTIAL"
         )
 
         if training_method == TrainingMethod.LINEAR:
