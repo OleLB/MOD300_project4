@@ -1,4 +1,4 @@
-"""Task  1 and 2"""
+"""Task 1 and 2"""
 
 from enum import Enum
 from dataclasses import dataclass
