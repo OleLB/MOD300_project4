@@ -1,9 +1,9 @@
-"""Convert the image generated into a rgb np.array (each pixel will be a list of 3 number,
-Red, Green, Blue (rbg)) between 0-255"""
+"""
+Convert the image generated into a rgb np.array (each pixel will be a list of 3 number,
+Red, Green, Blue (rbg)) between 0-255
+"""
 
 import numpy as np
-from Topic2.Task2 import gen_milkyway_sector
-
 
 def plt2rgbarr(fig):
     """
@@ -16,8 +16,7 @@ def plt2rgbarr(fig):
 
     Output
     ------
-    np.array(ndim, ndim, 3): A 3d map of each pixel in a rgb encoding (the three dimensions are x, y, and rgb)
-    
+    np.array: A 3d array of each pixel ([height, width, rgb])
     """
     fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
     fig.canvas.draw()
@@ -26,12 +25,15 @@ def plt2rgbarr(fig):
     rgba_arr = np.frombuffer(rgba_buf, dtype=np.uint8).reshape((h, w, 4))
     return rgba_arr[:, :, :3]
 
+
+
 if __name__ == "__main__":
+    from Topic1.Task2 import gen_milkyway_sector
     # Generate sector view centered at "Omega Centauri"
-    fig = gen_milkyway_sector("Omega Centauri", 5000, save=False)
+    test_fig = gen_milkyway_sector("Omega Centauri", 5000, save=False)
 
     # Convert the figure to an RGB array
-    rgb_array = plt2rgbarr(fig)
+    rgb_array = plt2rgbarr(test_fig)
 
     print(f"RGB array shape: {rgb_array.shape}")
     print(f"RGB array sample (5 pixels): {rgb_array.reshape(-1, 3)[:5]}")

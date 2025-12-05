@@ -1,4 +1,5 @@
-from Topic1.Task3 import plt2rgbarr
+"""File contains various function to encode rgb data"""
+
 import numpy as np
 
 def encode_rgb_data_brightness(rgb_array):
@@ -15,8 +16,9 @@ def encode_rgb_data_brightness(rgb_array):
 
     return brightness_encoding
 
+
 def encode_rgb_data_grey(rgb_array):
-    # A grey encoding
+    """Grey encoding for the rgb data"""
     luminance_weights = np.array([0.299, 0.587, 0.114]) # Standard luminance weights
     grey = np.sum(rgb_array[:, :, :] * luminance_weights, axis=2)  # From RGB to grey
     x, y = [], []
@@ -31,27 +33,26 @@ def encode_rgb_data_grey(rgb_array):
     return encoding
 
 
-
 if __name__ == "__main__":
+    from Topic1.Task3 import plt2rgbarr
     from Topic1.Task2 import gen_milkyway_sector
 
     # Generate sector view centered at "Omega Centauri"
     fig = gen_milkyway_sector("Omega Centauri", 5000, save=False)
 
     # Convert the figure to an RGB array
-    rgb_array = plt2rgbarr(fig)
+    test_rgb_array = plt2rgbarr(fig)
 
     # Create categories based on pixel brightness
-    brightness_encoding = encode_rgb_data_brightness(rgb_array)
+    test_brightness_encoding = encode_rgb_data_brightness(test_rgb_array)
 
-    print(f"Categories shape: {brightness_encoding.shape}")
-    print(f"Unique categories: {np.unique(brightness_encoding)}")
+    print(f"Categories shape: {test_brightness_encoding.shape}")
+    print(f"Unique categories: {np.unique(test_brightness_encoding)}")
     # print count of each category
-    unique, counts = np.unique(brightness_encoding, return_counts=True)
+    unique, counts = np.unique(test_brightness_encoding, return_counts=True)
     print(f"Category counts: {dict(zip(unique, counts))}")
 
     # Plot the categories
     import matplotlib.pyplot as plt
-    plt.imshow(brightness_encoding) # reference: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.imshow.html
-    # plt.colorbar(ticks=[0, 1, 2], label='Category')
+    plt.imshow(test_brightness_encoding)
     plt.show()
