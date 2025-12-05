@@ -34,7 +34,7 @@ class Country:
 
     def __post_init__(self) -> None:
         try:
-            filename = f"ebola_cases_{self.name.replace(' ', '_').lower()}.dat"
+            filename = f"Topic2/ebola_cases_{self.name.replace(' ', '_').lower()}.dat"
             df = pd.read_csv(filename, sep="\t")
             self.x = df["Days"].values.astype("float32").reshape(-1, 1)
             self.y = df["NumOutbreaks"].values.astype("float32").reshape(-1, 1)
