@@ -1,4 +1,4 @@
-from Task3 import plt2rgbarr
+from Topic1.Task3 import plt2rgbarr
 import numpy as np
 
 def encode_rgb_data_brightness(rgb_array):
@@ -33,7 +33,7 @@ def encode_rgb_data_grey(rgb_array):
 
 
 if __name__ == "__main__":
-    from Task2 import gen_milkyway_sector
+    from Topic1.Task2 import gen_milkyway_sector
 
     # Generate sector view centered at "Omega Centauri"
     fig = gen_milkyway_sector("Omega Centauri", 5000, save=False)

@@ -55,8 +55,8 @@ def kmeans_clustering(rgb_array, n_clusters=3):
     
 
 if __name__ == "__main__":
-    from Task2 import gen_milkyway_sector
-    from Task3 import plt2rgbarr
+    from Topic1.Task2 import gen_milkyway_sector
+    from Topic1.Task3 import plt2rgbarr
 
     # Generate sector view centered at "Omega Centauri"
     fig = gen_milkyway_sector("Omega Centauri", 2500, save=False)

@@ -30,7 +30,7 @@ def gen_milkyway_sector(sector_center: str, radius: int, background: str = "Mell
     fig, ax = plt.subplots(figsize=(5, 5))
     sector.transform(ax)
     if save:
-        sector.savefig(f'{sector_center}_{radius}.png')
+        sector.savefig(f'images/{sector_center}_{radius}.png')
     return fig
 
 

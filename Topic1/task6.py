@@ -1,6 +1,5 @@
-"""Over imposing cluster plot and original image"""
+"""Plotting cluster over original image"""
 
-import numpy as np
 import matplotlib.pyplot as plt
 
 def overlay_clustered_image(original_rgb, clustered_data, alpha=0.5, title="Original Image with K-Means Clustering Overlay"):
