@@ -2,5 +2,3 @@
 *.pdf
 milkyway_plot/
 *.png
-__pycache__/
-topic2_requirement.txt
