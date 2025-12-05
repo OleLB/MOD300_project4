@@ -110,7 +110,7 @@ def plot_countries(countries):
         ax = axes[i]
         ax.scatter(country.x, country.y, marker="o", linestyle="-", label="Real data")
         ax.set_title(country.name)
-        ax.set_xlabel("Days")
+        ax.set_xlabel("Days since first outbreak")
         ax.set_ylabel("Number of outbreaks")
 
         if country.y_pred is not None:
