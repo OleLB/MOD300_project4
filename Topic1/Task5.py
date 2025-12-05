@@ -27,7 +27,7 @@ def knn_clustering(rgb_array, brightness_encoding):
     # brightness_labels_flat = categories_array.flatten()
     brightness_encoding = brightness_encoding.flatten()
 
-    knn.fit(rgb_array, brightness_encoding) 
+    knn.fit(rgb_array, brightness_encoding)
     clustered_data = knn.predict(rgb_array)
     return clustered_data
 
@@ -63,8 +63,8 @@ def kmeans_clustering(rgb_array, n_clusters=3):
 
 
 if __name__ == "__main__":
-    from Topic1.Task2 import gen_milkyway_sector
-    from Topic1.Task3 import plt2rgbarr
+    from Topic1.task2 import gen_milkyway_sector
+    from Topic1.task3 import plt2rgbarr
 
     # Generate sector view centered at "Omega Centauri"
     fig = gen_milkyway_sector("Omega Centauri", 2500, save=False)
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     test_rgb_array = plt2rgbarr(fig)
 
     # Create categories based on pixel brightness
-    from Topic1.Task4 import encode_rgb_data_brightness
+    from Topic1.task4 import encode_rgb_data_brightness
     test_brightness_encoding = encode_rgb_data_brightness(test_rgb_array)
 
     # Perform K-NN clustering

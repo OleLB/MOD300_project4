@@ -28,7 +28,7 @@ def plt2rgbarr(fig):
 
 
 if __name__ == "__main__":
-    from Topic1.Task2 import gen_milkyway_sector
+    from Topic1.task2 import gen_milkyway_sector
     # Generate sector view centered at "Omega Centauri"
     test_fig = gen_milkyway_sector("Omega Centauri", 5000, save=False)
 

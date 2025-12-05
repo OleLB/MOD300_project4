@@ -1,3 +1,4 @@
+"""Task 0 Topic 2"""
 from typing import Iterable
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -20,7 +21,7 @@ def sezr_model_gamma(
     :return: Numpy Array of derivatives [dS/dt, dE/dt, dZ/dt, dR/dt, dC/dt] representing the
           rate of change for each compartment.
     """
-    S, E, Z, R = y
+    S, E, Z, _ = y
 
     beta = beta_0 * np.exp(-lam * t)
 
@@ -34,7 +35,8 @@ def sezr_model_gamma(
 
 def step(dt, f, t, S, method, *args, **kwargs):
     """
-    This function computes a single time step using either Euler's method or the second-order Runge-Kutta method (RK2).
+    This function computes a single time step using either Euler's method 
+        or the second-order Runge-Kutta method (RK2).
 
     :Parameters:
     dt: float
@@ -74,7 +76,8 @@ def ode_solver(
     **kwargs,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
-    This function uses Eulers method with richardson extrapolation to solve ODEs with constant or adaptive step size.
+    This function uses Eulers method with richardson extrapolation to 
+        solve ODEs with constant or adaptive step size.
 
     :params:
     h: float
@@ -135,12 +138,42 @@ def ode_solver(
                 eps_calc = np.linalg.norm((y_long - y_two_half) / (2**p - 1))
                 eps_calc = max(
                     eps_calc, 1e-15
-                )  # Prevents the whole function from blowin up if we divide by zero in prev line, fixes the "perfect step" problem
+                )  # Prevents the whole function from blowin up if we divide by 
+                        # zero in prev line, fixes the "perfect step" problem
                 dt_old = dt * (eps / eps_calc) ** (1 / (p + 1))
             y.append((2**p * y_two_half - y_long) / (2**p - 1))
             t.append(t[-1] + dt)
 
     return np.array(y), np.array(t)
+
+
+def non_linear_func(t, beta0, lam):
+    """
+    Simulates a time-decaying SEZR-like model and returns the interpolated
+    cumulative cases at specified time points.
+
+    :param array_like t: Time
+    :param float beta_0: Initial infection rate
+    :param float lam: Rate of exponential decay
+
+    :return array_like: Interpolated cumulative new cases at time points t
+    """
+    N = 1e7
+    sigma = 1 / 9
+    gamma = 1 / 10
+    S0, E0, Z0, R0 = N - 1, 0, 1, 0
+    y0 = np.array([S0, E0, Z0, R0])
+
+    y, t_sim = ode_solver(
+        1, "Euler", 0, max(t), y0, sezr_model_gamma, beta0, lam, sigma, gamma, N
+    )
+    S, _, Z, _ = y.T
+
+    beta_t = beta0 * np.exp(-lam * t_sim)
+    new_cases = beta_t * (S * Z / N)
+
+    return np.interp(t, t_sim, new_cases)
+
 
 
 def simulate_and_plot(filename: str, countryName: str) -> None:
@@ -155,48 +188,19 @@ def simulate_and_plot(filename: str, countryName: str) -> None:
 
     data = pd.read_csv(filename, sep="\t")
 
-    startIndex = 0
+    start_index = 0
     t0 = 0
 
     if countryName.lower() == "liberia":
-        startIndex = np.where(data["NumOutbreaks"] > 5)[0][0]
-        t0 = data["Days"].iloc[startIndex]
+        start_index = np.where(data["NumOutbreaks"] > 5)[0][0]
+        t0 = data["Days"].iloc[start_index]
 
-    t = data["Days"].iloc[startIndex:] - t0
-    new_cases_data = data["NumOutbreaks"].iloc[startIndex:]
-
-    def non_linear_func(t, beta0, lam):
-        """
-        Simulates a time-decaying SEZR-like model and returns the interpolated
-        cumulative cases at specified time points.
-
-        :param array_like t: Time
-        :param float beta_0: Initial infection rate
-        :param float lam: Rate of exponential decay
-
-        :return array_like: Interpolated cumulative new cases at time points t
-        """
-        N = 1e7
-        sigma = 1 / 9
-        gamma = 1 / 10
-        S0, E0, Z0, R0 = N - 1, 0, 1, 0
-        y0 = np.array([S0, E0, Z0, R0])
-
-        y, t_sim = ode_solver(
-            1, "Euler", 0, max(t), y0, sezr_model_gamma, beta0, lam, sigma, gamma, N
-        )
-        S, _, Z, _ = y.T
-
-        beta_t = beta0 * np.exp(-lam * t_sim)
-        new_cases = beta_t * (S * Z / N)
-
-        return np.interp(t, t_sim, new_cases)
+    t = data["Days"].iloc[start_index:] - t0
+    new_cases_data = data["NumOutbreaks"].iloc[start_index:]
 
     p0 = [0.18, 0.00185]
     bds = ((0.0, 0.0), (np.inf, np.inf))
-    popt, pcov = sp.optimize.curve_fit(
-        non_linear_func, t, new_cases_data, p0=p0, bounds=bds
-    )
+    popt, _ = sp.optimize.curve_fit(non_linear_func, t, new_cases_data, p0=p0, bounds=bds)
 
     N = 1e7
     sigma = 1 / 9

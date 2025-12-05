@@ -57,10 +57,6 @@ class Country:
             "Failed to load x and y values"
         )
 
-        assert TrainingMethod.has_value(training_method), (
-            "Training Method has to be either LINEAR, POLYNOMIAL or SEQUENTIAL"
-        )
-
         if training_method == TrainingMethod.LINEAR:
             self.model = LinearRegression()
             self.model.fit(self.x, self.y)
