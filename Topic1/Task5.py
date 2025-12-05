@@ -39,11 +39,11 @@ def kmeans_clustering(rgb_array, n_clusters=3):
         np.ndarray: An array containing the cluster label (0, 1, or 2) 
                     for each pixel, in flattened format.
     """
-    # 1. Reshape the RGB data into the required (N_pixels, 3) format.
+    # Reshape the RGB data
     N_pixels = rgb_array.shape[0] * rgb_array.shape[1]
     rgb_data_flat = rgb_array.reshape(N_pixels, 3)
 
-    # 2. Initialize the KMeans model.
+    # Initialize the KMeans model.
     kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
 
 

@@ -1,7 +1,7 @@
 from Task3 import plt2rgbarr
 import numpy as np
 
-def encode_rgb_data(rgb_array):
+def encode_rgb_data_brightness(rgb_array):
     """Function to encode rgb data into brightness levels."""
     brightness_encoding = np.zeros(rgb_array.shape[:2], dtype=int)
 
@@ -15,6 +15,21 @@ def encode_rgb_data(rgb_array):
 
     return brightness_encoding
 
+def encode_rgb_data_grey(rgb_array):
+    # A grey encoding
+    luminance_weights = np.array([0.299, 0.587, 0.114]) # Standard luminance weights
+    grey = np.sum(rgb_array[:, :, :] * luminance_weights, axis=2)  # From RGB to grey
+    x, y = [], []
+    for ig, g in enumerate(grey):
+        for ij, j in enumerate(g):
+            if j > 230:  # Select only bright pixels
+                x.append(ig)
+                y.append(ij)
+
+    encoding = np.zeros(rgb_array.shape[:2], dtype=int)
+    encoding[x, y] = 1  # Mark bright pixels as category 1
+    return encoding
+
 
 
 if __name__ == "__main__":
@@ -27,7 +42,7 @@ if __name__ == "__main__":
     rgb_array = plt2rgbarr(fig)
 
     # Create categories based on pixel brightness
-    brightness_encoding = encode_rgb_data(rgb_array)
+    brightness_encoding = encode_rgb_data_brightness(rgb_array)
 
     print(f"Categories shape: {brightness_encoding.shape}")
     print(f"Unique categories: {np.unique(brightness_encoding)}")
